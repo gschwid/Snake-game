@@ -5,56 +5,35 @@ from Snake import Snake
 from Food import Food
 
 class Game:
-    
-    game_over = False
 
-    def game_end(cls):
-        canv.destroy()
-        print("Game over wahhhhhh")
+    def __init__(self):
+        # Variables to keep track of movement and game mechanics
+        self.points = 0
+        self.game_over = False
+        self.move_right = False
+        self.move_left = False
+        self.move_up = False
+        self.move_down = False
 
-    def check_boundaries(cls):
-        while cls.game_over == False:
-            print("HI BABA")
+        self.window = tk.Tk()
+        self.window.geometry("500x500") # Sizing the window for the snake game
+        self.window.title("Snake")
+        self.canv = tk.Canvas(self.window,width=500,height=500,bg="black")
+        self.canv.pack() # IDK what this rlly does but it puts the canvas on the windo
 
+        # Setting binds for movement
+        # self.window.bind("w", self.up)
+        # self.window.bind("s", self.down)
+        # self.window.bind("a", self.left)
+        # self.window.bind("d", self.right)
 
-    def up(event):
-        while True:
-            canv.update()
-            canv.move(snake.getSnake(),0,-25)
-            time.sleep(.1)
+        # Instance of snake and food class
+        self.food = Food(self.canv)
+        self.snake = Snake(self.canv,150,200)
 
-    def down(event):
-        while True:
-            canv.update()
-            canv.move(snake.getSnake(),0,25)
-            time.sleep(.1)
+    def getSnake(self):
+        return self.snake.getPos()
 
-    def left(event):
-        while True:
-            canv.update()
-            canv.move(snake.getSnake(),-25,0)
-            time.sleep(.1)
-
-    def right(event):
-        while True:
-            canv.update()
-            canv.move(snake.getSnake(),25,0)
-            time.sleep(.1)
-
-    window = tk.Tk()
-    window.geometry("500x500") # Sizing the window for the snake game
-    window.title("Snake")
-    global canv
-    canv = tk.Canvas(window,width=500,height=500,bg="black")
-    canv.pack() # IDK what this rlly does but it puts the canvas on the windo
-
-    window.bind("w", up)
-    window.bind("s", down)
-    window.bind("a", left)
-    window.bind("d", right)
-    global snake
-    food = Food(canv)
-    snake = Snake(canv,150,200)
-    window.mainloop() # Displays the GUI
-
+    def runGame(self):
+        self.window.mainloop() # Displays the GUI
 
