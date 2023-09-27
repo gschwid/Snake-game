@@ -30,10 +30,24 @@ class Game:
         # Instance of snake and food class
         self.food = Food(self.canv)
         self.snake = Snake(self.canv,150,200)
+        self.gameMovement(self.snake,self.food)
+        print(self.food.getPos())
 
-    def getSnake(self):
-        return self.snake.getPos()
+    def gameMovement(self,snake: Snake,food: Food):
+        body = snake.getSnakeBody()
+        cords = snake.getSnakeCords()
+        x,y = cords[0] # Gets the position of the head of the snake.
+        x = x + 25
+        snakeHead = self.canv.create_rectangle(x,y,x + 25, y + 25,fill="green")
+        body.insert(0,snakeHead)
+        cords.insert(0,[x,y])
+        self.canv.delete(body[-1])
+        del body[-1]
+        del cords[-1]
+        self.canv.update()
+        self.window.after(200,self.gameMovement,snake,food)
 
     def runGame(self):
         self.window.mainloop() # Displays the GUI
 
+    
