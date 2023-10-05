@@ -8,6 +8,7 @@ class Game:
 
     def __init__(self):
         # Variables to keep track of movement and game mechanics
+        self.oldDirection = "down"
         self.direction = "down"
         self.points = 0
         self.game_over = False
@@ -36,25 +37,43 @@ class Game:
         x,y = cords[0] # Gets the position of the head of the snake.
 
         # If statements that determine how the coordinates get updated.
-        if self.direction == "up":
-            y = y - 25 # moves head up 
-        elif self.direction == "down":
-            y = y + 25 # moves head down
-        elif self.direction == "right":
-            x = x + 25 # moves head right
-        else:
-            x = x - 25 # moves head left
+        if (self.direction == "up"):
+            if(self.oldDirection == "down"):
+                self.direction = "down" # Updates the current direction if its unable to move cause itll kill itself
+                y = y + 25
+            else:
+                y = y - 25 # moves head up 
+        elif (self.direction == "down"):
+            if (self.oldDirection == "up"):
+                self.direction = "up" # Updates the current direction if its unable to move cause itll kill itself
+                y = y - 25
+            else:
+                y = y + 25 # moves head down
+        elif (self.direction == "right"):
+            if (self.oldDirection == "left"):
+                self.direction = "left" # Updates the current direction if its unable to move cause itll kill itself
+                x = x - 25
+            else:
+                x = x + 25 # moves head right
+        elif (self.direction == "left"):
+            if(self.oldDirection == "right"):
+                self.direction = "right" # Updates the current direction if its unable to move cause itll kill itself
+                x = x + 25
+            else:
+                x = x - 25 # moves head left
 
         # Creates a new head for the snake depending on which way the user inputs.
         snakeHead = self.canv.create_rectangle(x,y,x + 25, y + 25,fill="green") # Creates new square to replace the old snake head
         body.insert(0,snakeHead)
         cords.insert(0,[x,y])
 
-        if self.checkBounds(x,y):
+        # Checks for out of bounce and self collisions
+        if self.checkBounds(x,y) or self.checkCollisions(cords):
             self.window.destroy()
         
+        # If the snake touches the food, the food gets moved and the snake gets another piece.
         elif(cords[0] == food.getPos()):
-            self.food.move(self.canv)
+            self.food.move(self.canv,cords)
             self.points += 1
 
         else:
@@ -69,26 +88,38 @@ class Game:
     def checkBounds(self,x: int,y: int): # Method ends the game if the snake leaves the screen
         if x >= 500 or x < 0:
             print("Game over")
+            print("You got " + str(self.points) + " points")
             return True
         elif y >= 500 or y < 0:
             print("Game over")
+            print("You got " + str(self.points) + " points")
             return True     
         else:
             return False
     
-    def checkCollisions(self,snake:Snake): # Checks if the snake has collided with itself.
-        pass
+    def checkCollisions(self,cords): # Checks if the snake has collided with itself.
+        head = cords[0]
+        for i in cords[1:]: # Compares the head cords to all the other cords in the list
+            if head == i:
+                print("Game over")
+                print("You got " + str(self.points) + " points")
+                return True
+        return False
     
     def up(self,event):
+        self.oldDirection = self.direction
         self.direction = "up"
 
     def down(self,event):
+        self.oldDirection = self.direction
         self.direction = "down"
 
     def right(self,event):
+        self.oldDirection = self.direction
         self.direction = "right"
 
     def left(self,event):
+        self.oldDirection = self.direction
         self.direction = "left"
     
     def runGame(self):

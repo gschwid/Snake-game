@@ -10,7 +10,7 @@ class Snake:
         self.cords = [] # keeps track of the coordnates of the snake
         self.body = [] # keeps track of the squares associated with the cords.
 
-        for i in range(2): # Creating the starting coordinates for the snake
+        for i in range(3): # Creating the starting coordinates for the snake
             self.cords.append([self.x,self.y])
        
         for x,y in self.cords: # This is creating the 2 rectangles to start the snake.

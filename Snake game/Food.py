@@ -6,9 +6,9 @@ class Food:
     def __init__(self,canvas:tk.Canvas):
         self.canvas = canvas 
         self.food = canvas.create_rectangle(0,0,25,25,fill="red") # Creates the red square
-        self.move(canvas)
+        self.move(canvas,[[150,200]])
     
-    def move(self,canvas:tk.Canvas): # Generates random x and y value on a 20 x 20 grid
+    def move(self,canvas:tk.Canvas,body): # Generates random x and y value on a 20 x 20 grid
         x = (ran.randint(0,19)) * 25
         y = (ran.randint(0,19)) * 25
         self.canvas.delete(self.food)
